@@ -1,9 +1,5 @@
 
 
-console.log("main.js loaded");
-console.log(import.meta.env);
-
-
 document
 .getElementById('about-btn')
 .addEventListener(
