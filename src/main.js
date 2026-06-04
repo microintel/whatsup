@@ -372,9 +372,7 @@ auth,
 async user => {
 
   // hide loading screen
-  document
-  .getElementById('auth-loading')
-  .style.display = 'none';
+  
 
   if (!user) {
 
@@ -401,41 +399,30 @@ async user => {
 // START APP
 async function startApp() {
 
-listenIncomingCalls();
+  listenIncomingCalls();
 
   await setDoc(
-  doc(
-  db,
-  'users',
-  currentUser.uid
-  ),
-  {
-  uid: currentUser.uid,
-  
-  name: currentUser.displayName,
-  
-  email: currentUser.email,
-  
-  photo: currentUser.photoURL
-  }
-  );
-  document
-  .getElementById(
-    'login-screen'
-  ).style.display = 'none';
-
-  document
-  .getElementById(
-    'app'
-  ).classList.add(
-    'visible'
+    doc(
+      db,
+      'users',
+      currentUser.uid
+    ),
+    {
+      uid: currentUser.uid,
+      name: currentUser.displayName,
+      email: currentUser.email,
+      photo: currentUser.photoURL
+    }
   );
 
   document
-  .getElementById(
-    'sidebar-username'
-  ).textContent =
-    currentUser.displayName;
+    .getElementById('login-screen')
+    .style.display = 'none';
+
+  document
+    .getElementById('sidebar-username')
+    .textContent =
+      currentUser.displayName;
 
   const wrap =
     document.getElementById(
@@ -443,40 +430,39 @@ listenIncomingCalls();
     );
 
   wrap.innerHTML = `
-
     <img
       src="${currentUser.photoURL}"
       class="avatar"
     />
   `;
 
-  await loadDMUsers();
-  
+  // Prepare mobile UI BEFORE showing app
   if (window.innerWidth <= 768) {
-  document
-  .getElementById('sidebar')
-  .classList.add('open');
-  
-  document
-  .getElementById('sidebar-overlay')
-  .classList.add('show');
-  }
-  
-  if (window.innerWidth <= 768) {
-  document
-  .getElementById('chat-area')
-  .classList.add('no-chat');
-  
-  document
-  .getElementById('sidebar')
-  .classList.add('open');
-  
-  document
-  .getElementById('sidebar-overlay')
-  .classList.add('show');
-  }
-}
 
+    document
+      .getElementById('chat-area')
+      .classList.add('no-chat');
+
+    document
+      .getElementById('sidebar')
+      .classList.add('open');
+
+    document
+      .getElementById('sidebar-overlay')
+      .classList.add('show');
+  }
+
+  await loadDMUsers();
+
+  // Show app only after everything is ready
+  document
+    .getElementById('app')
+    .classList.add('visible');
+
+  document
+    .getElementById('auth-loading')
+    .style.display = 'none';
+}
 
 // LOAD USERS
 // LOAD ONLY CHATTED USERS
