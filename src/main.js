@@ -451,6 +451,30 @@ listenIncomingCalls();
   `;
 
   await loadDMUsers();
+  
+  if (window.innerWidth <= 768) {
+  document
+  .getElementById('sidebar')
+  .classList.add('open');
+  
+  document
+  .getElementById('sidebar-overlay')
+  .classList.add('show');
+  }
+  
+  if (window.innerWidth <= 768) {
+  document
+  .getElementById('chat-area')
+  .classList.add('no-chat');
+  
+  document
+  .getElementById('sidebar')
+  .classList.add('open');
+  
+  document
+  .getElementById('sidebar-overlay')
+  .classList.add('show');
+  }
 }
 
 
@@ -1006,6 +1030,10 @@ function openDM(user) {
   document
   .getElementById('sidebar-overlay')
   .classList.remove('show');
+  
+  document
+  .getElementById('chat-area')
+  .classList.remove('no-chat');
   
   
   
@@ -2332,4 +2360,3 @@ document
 'click',
 endCall
 );
-
