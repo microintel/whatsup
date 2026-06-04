@@ -504,6 +504,30 @@ async function searchUsers(text) {
 
   text = text.trim().toLowerCase();
 
+  // ls = show all registered users
+  if (text === 'ls') {
+
+    const snap = await getDocs(
+      collection(db, 'users')
+    );
+
+    const results = [];
+
+    snap.forEach(docSnap => {
+
+      const user = docSnap.data();
+
+      if (
+        user.uid === currentUser.uid
+      ) return;
+
+      results.push(user);
+    });
+
+    renderDMListFromSearch(results);
+    return;
+  }
+
   if (!text) {
 
     renderDMList();
@@ -2308,5 +2332,4 @@ document
 'click',
 endCall
 );
-
 
