@@ -110,12 +110,13 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
+console.log("2 - Firebase initialized");
 const messaging = getMessaging(app);
 
 const auth = getAuth(app);
-
+console.log("3 - Auth initialized");
 const db = getFirestore(app);
+console.log("4 - Firestore initialized");
 
 onMessage(
   messaging,
@@ -436,7 +437,7 @@ deleteMyAccount
 onAuthStateChanged(
 auth,
 async user => {
-
+console.log("5 - Auth state changed", user);
   // hide loading screen
   
 
@@ -458,13 +459,13 @@ async user => {
   }
 
   currentUser = user;
-
+console.log("6 - User logged in");
   await startApp();
 });
 
 // START APP
 async function startApp() {
-
+console.log("9 - startApp entered");
   listenIncomingCalls();
 
   let fcmToken = null;
