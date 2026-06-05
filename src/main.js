@@ -467,8 +467,13 @@ async function startApp() {
 
   listenIncomingCalls();
 
-  const fcmToken =
-  await enableNotifications();
+  let fcmToken = null;
+
+try {
+  fcmToken = await enableNotifications();
+} catch (e) {
+  console.error("FCM error:", e);
+}
   
   await setDoc(
   doc(db, "users", currentUser.uid),
