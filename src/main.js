@@ -98,7 +98,7 @@ import {
   getMessaging,
   getToken,
   onMessage
-} from "firebase/messaging";
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 // FIREBASE
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
