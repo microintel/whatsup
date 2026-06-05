@@ -1,4 +1,4 @@
-
+console.log("MAIN JS LOADED");
 
 document
 .getElementById('about-btn')
