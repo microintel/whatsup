@@ -94,6 +94,11 @@ import {
   updateDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
+import {
+  getMessaging,
+  getToken,
+  onMessage
+} from "firebase/messaging";
 // FIREBASE
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -106,9 +111,32 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+const messaging = getMessaging(app);
+
 const auth = getAuth(app);
 
 const db = getFirestore(app);
+
+onMessage(
+  messaging,
+  (payload) => {
+
+    console.log(
+      "Foreground message:",
+      payload
+    );
+
+    new Notification(
+      payload.notification.title,
+      {
+        body:
+          payload.notification.body,
+        icon:"/favicon.ico"
+      }
+    );
+
+  }
+);
 
 
 // STATE
@@ -132,6 +160,44 @@ const servers = {
     }
   ]
 };
+
+async function enableNotifications() {
+
+  try {
+
+    const permission =
+      await Notification.requestPermission();
+
+    if (permission !== "granted") {
+      alert("Notification permission denied");
+      return;
+    }
+
+    const token =
+      await getToken(
+        messaging,
+        {
+          vapidKey:
+            import.meta.env.VITE_VAPID_KEY
+        }
+      );
+
+    console.log(
+      "FCM TOKEN:",
+      token
+    );
+
+    return token;
+
+  } catch (err) {
+
+    console.error(
+      "Notification error:",
+      err
+    );
+
+  }
+}
 
 
 let currentUser = null;
@@ -401,18 +467,19 @@ async function startApp() {
 
   listenIncomingCalls();
 
+  const fcmToken =
+  await enableNotifications();
+  
   await setDoc(
-    doc(
-      db,
-      'users',
-      currentUser.uid
-    ),
-    {
-      uid: currentUser.uid,
-      name: currentUser.displayName,
-      email: currentUser.email,
-      photo: currentUser.photoURL
-    }
+  doc(db, "users", currentUser.uid),
+  {
+  uid: currentUser.uid,
+  name: currentUser.displayName,
+  email: currentUser.email,
+  photo: currentUser.photoURL,
+  fcmToken
+  },
+  { merge:true }
   );
 
   document
