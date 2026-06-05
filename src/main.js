@@ -443,20 +443,22 @@ console.log("5 - Auth state changed", user);
 
   if (!user) {
 
-    document
-    .getElementById(
-      'login-screen'
-    ).style.display = 'flex';
+  document
+    .getElementById('login-screen')
+    .style.display = 'flex';
 
-    document
-    .getElementById(
-      'app'
-    ).classList.remove(
-      'visible'
-    );
+  document
+    .getElementById('app')
+    .classList.remove('visible');
 
-    return;
-  }
+  document
+    .getElementById('auth-loading')
+    .style.display = 'none';
+
+  console.log("8 - No user");
+
+  return;
+}
 
   currentUser = user;
 console.log("6 - User logged in");
